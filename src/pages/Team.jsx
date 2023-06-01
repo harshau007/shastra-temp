@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { nanoid } from "nanoid"
 
 import TeamCard from "../components/Card/TeamCard"
+import axios  from "axios";
 
 const core_API = "https://shastra-api.onrender.com/coreMembers";
 const subcore_API = "https://shastra-api.onrender.com/subcoreMembers";
@@ -11,25 +12,24 @@ export default function Team() {
     const [subCore, setSubCore] = useState([])
 
     const fetchTeam = async(url, setTeam) => {
-        try {
-            const res = await fetch(url, {
-                method: "GET",
-                crossDomain: true,
+            axios.get(url, {
                 headers: {
                     "Content-Type": "application/json",
                     Accept: "application/json",
                     "Access-Control-Allow-Origin": "*"
                 }
-            });
-            const data = await res.json()
-            if(data.length > 0){
-                setTeam(data)
-            } else {
-                throw new console.error("No data found")
-            }
-        } catch (error) {
-            throw new console.error(error)
-        }
+            })
+                .then(response => {
+                    const data = response.data;
+                    if (data.length > 0) {
+                        setTeam(data);
+                    } else {
+                        throw new Error("No data found");
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
     }
 
     useEffect(() => {
@@ -47,7 +47,7 @@ export default function Team() {
                 <div className="team--core-grid team-card"
                 >
                     {
-                        core && 
+                        core &&
                         core.map(member => (
                             <TeamCard 
                                 key={nanoid()}
