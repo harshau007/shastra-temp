@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
 import { nanoid } from "nanoid"
-
 import TeamCard from "../components/Card/TeamCard"
 import axios  from "axios";
+import { CirclesToRhombusesSpinner, SelfBuildingSquareSpinner } from 'react-epic-spinners'
 
 const core_API = "https://shastra-api.onrender.com/coreMembers";
 const subcore_API = "https://shastra-api.onrender.com/subcoreMembers";
@@ -46,10 +46,9 @@ export default function Team() {
             <div className="relative mt-32 mb-16 w-full flex flex-col">
                 <h1 className="uppercase font-bold text-2xl mx-auto w-max md:text-4xl mb-7 gradient-txt">Know the Core</h1>
 
-                <div className="team--core-grid team-card"
-                >
-                    {   loading ? "Loading..." :
-                        core &&
+                <div className="team--core-grid team-card">
+                    {   loading ? <CirclesToRhombusesSpinner color="orange"/>:
+                        core && 
                         core.map(member => (
                             <TeamCard 
                                 key={nanoid()}
@@ -69,7 +68,7 @@ export default function Team() {
                 
                 <div className="team--subcore-grid team-card"
                 >
-                    {   loading ? "Loading..." :
+                    {   loading ? <CirclesToRhombusesSpinner color="orange"/> :
                         subCore && 
                         subCore.map(member => (
                             <TeamCard 
