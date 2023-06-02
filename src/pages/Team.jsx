@@ -10,26 +10,28 @@ const subcore_API = "https://shastra-api.onrender.com/subcoreMembers";
 export default function Team() {
     const [core, setCore] = useState([])
     const [subCore, setSubCore] = useState([])
+    const [loading, setLoading] = useState(true);
 
     const fetchTeam = async(url, setTeam) => {
-            axios.get(url, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    "Access-Control-Allow-Origin": "*"
+        axios.get(url, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        })
+            .then(response => {
+                const data = response.data;
+                if (data.length > 0) {
+                    setTeam(data);
+                    setLoading(false);
+                } else {
+                    throw new Error("No data found");
                 }
             })
-                .then(response => {
-                    const data = response.data;
-                    if (data.length > 0) {
-                        setTeam(data);
-                    } else {
-                        throw new Error("No data found");
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     useEffect(() => {
@@ -46,7 +48,7 @@ export default function Team() {
 
                 <div className="team--core-grid team-card"
                 >
-                    {
+                    {   loading ? "Loading..." :
                         core &&
                         core.map(member => (
                             <TeamCard 
@@ -67,7 +69,7 @@ export default function Team() {
                 
                 <div className="team--subcore-grid team-card"
                 >
-                    {
+                    {   loading ? "Loading..." :
                         subCore && 
                         subCore.map(member => (
                             <TeamCard 
